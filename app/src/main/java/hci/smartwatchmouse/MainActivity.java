@@ -18,7 +18,7 @@ import android.widget.TextView;
 public class MainActivity extends WearableActivity
         implements SensorEventListener{
 
-    private Sensor accSensor, gyroSensor;
+    private Sensor accSensor, gyroSensor, accCleanSensor;
     private SensorManager sensorManager;
     private TextView sensorX,sensorY, sensorZ;
 
@@ -35,9 +35,12 @@ public class MainActivity extends WearableActivity
 
         setAmbientEnabled();
         accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
+        gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        accCleanSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         sensorManager.registerListener(this, accSensor, 100 * 1000);
+        sensorManager.registerListener(this, gyroSensor, 100 * 1000);
+        sensorManager.registerListener(this, accCleanSensor, 100 * 1000);
 
         sensorX = (TextView) findViewById(R.id.sensor_X);
         sensorY = (TextView) findViewById(R.id.sensor_Y);
@@ -56,13 +59,17 @@ public class MainActivity extends WearableActivity
     @Override
     public void onSensorChanged(SensorEvent event) {
         Log.d("MainActivity", "onSensorChanged: " + event);
+        if (event.sensor == gyroSensor){
+            float[] v = event.values;
+            sensorX.setText(String.format("a: %.3f, %.3f, %.3f", v[0], v[1], v[2]));
+        }
         if (event.sensor == accSensor) {
             float[] vs = event.values;
             sensorY.setText(String.format("a: %.3f, %.3f, %.3f", vs[0], vs[1], vs[2]));
         }
-        if (event.sensor == gyroSensor){
-            float[] v = event.values;
-            sensorX.setText(String.format("a: %.3f, %.3f, %.3f", v[0], v[1], v[2]));
+        if (event.sensor == accCleanSensor){
+            float[] vx = event.values;
+            sensorZ.setText(String.format("a: %.3f, %.3f, %.3f", vx[0], vx[1], vx[2]));
         }
     }
     @Override
