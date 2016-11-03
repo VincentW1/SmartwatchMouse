@@ -18,7 +18,7 @@ import android.widget.TextView;
 public class MainActivity extends WearableActivity
         implements SensorEventListener{
 
-    private Sensor accSensor, gyroSensor, accCleanSensor;
+    private Sensor accSensor, gyroSensor, accCleanSensor, gameRotationSensor;
     private SensorManager sensorManager;
     private TextView sensorX,sensorY, sensorZ;
 
@@ -37,10 +37,14 @@ public class MainActivity extends WearableActivity
         accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         accCleanSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        gameRotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
 
         sensorManager.registerListener(this, accSensor, 100 * 1000);
         sensorManager.registerListener(this, gyroSensor, 100 * 1000);
         sensorManager.registerListener(this, accCleanSensor, 100 * 1000);
+        sensorManager.registerListener(this, gameRotationSensor, 100 * 1000);
+
+
 
         sensorX = (TextView) findViewById(R.id.sensor_X);
         sensorY = (TextView) findViewById(R.id.sensor_Y);
@@ -67,7 +71,7 @@ public class MainActivity extends WearableActivity
             float[] vs = event.values;
             sensorY.setText(String.format("a: %.3f, %.3f, %.3f", vs[0], vs[1], vs[2]));
         }
-        if (event.sensor == accCleanSensor){
+        if (event.sensor == gameRotationSensor){
             float[] vx = event.values;
             sensorZ.setText(String.format("a: %.3f, %.3f, %.3f", vx[0], vx[1], vx[2]));
         }
