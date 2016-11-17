@@ -21,6 +21,7 @@ public class MainActivity extends WearableActivity
     private Sensor accSensor, gyroSensor, accCleanSensor, gameRotationSensor;
     private SensorManager sensorManager;
     private TextView sensorX,sensorY, sensorZ;
+    private String accData, gyroData, gameData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,21 +63,32 @@ public class MainActivity extends WearableActivity
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        Log.d("MainActivity", "onSensorChanged: " + event);
+        //Log.d("MainActivity", "onSensorChanged: " + event);
         if (event.sensor == gyroSensor){
             float[] v = event.values;
             sensorX.setText(String.format("a: %.3f, %.3f, %.3f", v[0], v[1], v[2]));
+            //Log.d("Gyro", String.format("%.3f, %.3f, %.3f", v[0], v[1], v[2]));
         }
         if (event.sensor == accSensor) {
             float[] vs = event.values;
             sensorY.setText(String.format("a: %.3f, %.3f, %.3f", vs[0], vs[1], vs[2]));
+            //Log.d("Acc", String.format("%.3f, %.3f, %.3f", vs[0], vs[1], vs[2]));
+
+
         }
         if (event.sensor == gameRotationSensor){
             float[] vx = event.values;
             sensorZ.setText(String.format("a: %.3f, %.3f, %.3f", vx[0], vx[1], vx[2]));
+            Log.d("Game", String.format("%.3f, %.3f, %.3f", vx[0], vx[1], vx[2]));
+
         }
     }
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) { Log.d("MainActivity", "onAccuracyChanged: " + sensor + ", " + accuracy);
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        Log.d("MainActivity", "onAccuracyChanged: " + sensor + ", " + accuracy);
     }
+    /*public void onClose() {
+        Log.d("MainActivity","onClose");
+
+    }*/
 }
