@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WatchViewStub;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -22,6 +24,7 @@ public class MainActivity extends WearableActivity
     private SensorManager sensorManager;
     private TextView sensorX,sensorY, sensorZ;
     private String accData, gyroData, gameData;
+    private Button BigB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,20 +48,20 @@ public class MainActivity extends WearableActivity
         sensorManager.registerListener(this, accCleanSensor, 100 * 1000);
         sensorManager.registerListener(this, gameRotationSensor, 100 * 1000);
 
-
-
         sensorX = (TextView) findViewById(R.id.sensor_X);
         sensorY = (TextView) findViewById(R.id.sensor_Y);
         sensorZ = (TextView) findViewById(R.id.sensor_Z);
+        BigB = (Button) findViewById(R.id.BigButton);
 
+        BigB.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Click();
+            }
+        });
+    }
 
-//        final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-//        stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
-//            @Override
-//            public void onLayoutInflated(WatchViewStub stub) {
-//                //mTextView = (TextView) stub.findViewById(R.id.sensor_Y);
-//            }
-//        });
+    public void Click(){
+        Log.d("Game", "------------");
     }
 
     @Override
@@ -66,19 +69,19 @@ public class MainActivity extends WearableActivity
         //Log.d("MainActivity", "onSensorChanged: " + event);
         if (event.sensor == gyroSensor){
             float[] v = event.values;
-            sensorX.setText(String.format("a: %.3f, %.3f, %.3f", v[0], v[1], v[2]));
+            sensorX.setText(String.format("%+4.3f, %+4.3f, %+4.3f", v[0], v[1], v[2]));
             //Log.d("Gyro", String.format("%.3f, %.3f, %.3f", v[0], v[1], v[2]));
         }
         if (event.sensor == accSensor) {
             float[] vs = event.values;
-            sensorY.setText(String.format("a: %.3f, %.3f, %.3f", vs[0], vs[1], vs[2]));
+            sensorY.setText(String.format("%+4.3f, %+4.3f, %+4.3f", vs[0], vs[1], vs[2]));
             //Log.d("Acc", String.format("%.3f, %.3f, %.3f", vs[0], vs[1], vs[2]));
 
 
         }
         if (event.sensor == gameRotationSensor){
             float[] vx = event.values;
-            sensorZ.setText(String.format("a: %.3f, %.3f, %.3f", vx[0], vx[1], vx[2]));
+            sensorZ.setText(String.format("%+4.3f, %+4.3f, %+4.3f", vx[0], vx[1], vx[2]));
             Log.d("Game", String.format("%.3f, %.3f, %.3f", vx[0], vx[1], vx[2]));
 
         }
